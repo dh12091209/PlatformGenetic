@@ -1,6 +1,7 @@
 import random
 import pygame
 from player import *
+from player_ai import *
 
 
 #start the pygame engine
@@ -15,43 +16,74 @@ pygame.mixer.init();
 
 #game variables
 simOver = False
-p1 = Player()
-cam_x = 250
-cam_y = 250
+ai_players = []
 map1 = Map()
-camera_group = pygame.sprite.Group()
-
-
+camera_offset = (0,0)
+camera_pos = (0,500)
 
 #game independent variables (needed for every pygame)
 FPS = 60 #60 Frames Per Second for the game update cycle
 fpsClock = pygame.time.Clock() #used to lock the game to 60 FPS
-screen = pygame.display.set_mode((1280,720)); #initialize the game window
-# def get_sprite(self,x,y,width,height):
-#     sprite = pygame.Surface([width,height])
-#     sprite.blit(self.)
-def create_map_1():
-    map1.add(Platform(100,600,400,30,(0,255,0)))
-    map1.add(Platform(600, 430, 30, 100, (0, 255, 0)))
-    map1.add(Platform(300, 600, 400, 30, (0, 255, 0)))
-    map1.add(Platform(700, 430, 30, 100, (0, 255, 0)))
-    map1.add(Platform(700,530,400,30,(0,255,0)))
-    map1.add(Platform(0,720,1280,20,(0,255,0)))
-    map1.add(Platform(825,270,400,30,(0,255,0)))
-    map1.add(Platform(460, 200, 30, 30, (0, 255, 0)))
+screen = pygame.display.set_mode((1280,720)) #initialize the game window
+world = pygame.Surface((3000,3000))
 
+def create_ai_player():
+    for i in range(50):
+        ai_players.append(PlayerAI())
+def create_map_1():
+    map1.add(Platform(0,690,2400,30,(0,255,0)))
+    map1.add(Platform(100,600,400,30,(0,255,0)))
+    map1.add(Platform(200,500,400,30,(0,255,0)))
+    map1.add(Platform(100,350,200,30,(0,255,0)))
+    map1.add(Platform(270,250,200,30,(0,255,0)))
+    map1.add(Platform(600,200,30,400,(0,255,0)))
+    map1.add(Platform(715,120,300,30,(0,255,0)))
+    map1.add(Platform(740,700,300,30,(0,255,0)))
+    map1.add_coin(Coin(600,650))
+    map1.add_coin(Coin(220,450))
+    map1.add_coin(Coin(730,80))
     map1.set_gravity(-4)
 
 def draw_mouse_coords():
-    textSurface = myfont.render(str(pygame.mouse.get_pos()), True ,(255,255,255))
-    screen.blit(textSurface,(50,30))
+    textSurface = myfont.render(str(pygame.mouse.get_pos()), True, (255,255,255))
+    world.blit(textSurface, (50, 30))
+    # textSurface = myfont.render(str(ai_players[0].get_current_allele()), True, (255,255,255))
+    # world.blit(textSurface, (50, 70))
+
 def clear_screen():
-    pygame.draw.rect(screen, (0,0,0), (0, 0, 1280, 720))
+    pygame.draw.rect(world, (0,0,0), (0, 0, world.get_rect().width, world.get_rect().height))
 
+def update_camera():
+    global camera_pos
+    if pygame.key.get_pressed()[pygame.K_RIGHT]:
+        camera_pos = (camera_pos[0]+10,camera_pos[1])
+    if pygame.key.get_pressed()[pygame.K_LEFT]:
+        camera_pos = (camera_pos[0]-10,camera_pos[1])
+    if pygame.key.get_pressed()[pygame.K_UP]:
+        camera_pos = (camera_pos[0],camera_pos[1]-10)
+    if pygame.key.get_pressed()[pygame.K_DOWN]:
+        camera_pos = (camera_pos[0],camera_pos[1]+10)
 
-#initialize all data before gameplay
+def sort_ai_by_score():
+    for i in range(len(ai_players)-1):
+        for j in range(len(ai_players)-2):
+            p1= ai_players[j]
+            p2 = ai_players[j+1]
+            if p1.get_score() < p2.get_score():
+                temp = p1
+                ai_players[j] = p2
+                ai_players[j+1] = temp
+
+#no worky
+def kill_bottom_half():
+    global ai_players
+    ai_players = ai_players[0:int(len(ai_players)/2)]
+
+# initialize all data before gameplay
 create_map_1()
-p1.setMap(map1)
+create_ai_player()
+for p in ai_players:
+    p.setMap(map1)
 
 
 #main while loop
@@ -63,19 +95,38 @@ while not simOver:
         if event.type == pygame.QUIT:
             simOver = True
 
-    #draw code
+    # draw code
     clear_screen()
-    map1.draw(screen)
-    p1.draw(screen)
+    map1.draw(world)
+    for p in ai_players:
+        p.draw(world)
+
     draw_mouse_coords()
 
-    #player update code
-    p1.act()
+    # player update code
+    update_camera()
 
-    #Tween Camera
-    cam_x+= ()
+    #if the first ai is done, they are all done, reset all of them
+    if ai_players[0].is_done():
+        for p in ai_players:
+            sort_ai_by_score()
+            kill_bottom_half()
+            p.reset()
+
+
+    for p in ai_players:
+        p.act()
+    x_offset = 0
+    y_offset = 0
+    # if camera_pos[0] > 640:
+    x_offset = 640 - camera_pos[0]
+    # if camera_pos[1] < 350:
+    y_offset = 350 - camera_pos[1]
+    camera_offset = (x_offset, y_offset)
+    #camera_pos = ((player_pos[0], player_pos[1] - 900))
 
     #put all the graphics on the screen
     #should be the LAST LINE of game code
+    screen.blit(world,camera_offset)
     pygame.display.flip()
     fpsClock.tick(FPS) #slow the loop down to 60 loops per second
