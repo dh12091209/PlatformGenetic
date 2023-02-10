@@ -72,6 +72,7 @@ class PlayerAI:
             # print(str(self.currentAllele) + ":" + str(self.dna[self.currentAllele]))
 
         self.x_distance_covered = self.player.get_x()
+
         return self.player.act()
 
     def draw(self, screen):

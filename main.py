@@ -44,11 +44,20 @@ def create_map_1():
     map1.add_coin(Coin(730,80))
     map1.set_gravity(-4)
 
+def add_kids():
+    allParents = len(ai_players)
+    parent1 = random.randint(0,allParents - 1)
+    parent2 = random.randint(0, allParents - 1)
+    dnaSliceIndex = random.randint(0,499)
+    parent1_dna_slice = ai_players[parent1].get_dna_sequence[0:dnaSliceIndex]
+    parent2_dna_slice = ai_players[parent2].get_dna_sequence[0:dnaSliceIndex]
 def draw_mouse_coords():
     textSurface = myfont.render(str(pygame.mouse.get_pos()), True, (255,255,255))
     world.blit(textSurface, (50, 30))
-    # textSurface = myfont.render(str(ai_players[0].get_current_allele()), True, (255,255,255))
-    # world.blit(textSurface, (50, 70))
+    textSurface = myfont.render(str(ai_players[0].get_current_allele()), True, (255,255,255))
+    world.blit(textSurface, (50, 70))
+    textSurface = myfont.render(str(len(ai_players)), True, (255, 255, 255))
+    world.blit(textSurface, (50, 110))
 
 def clear_screen():
     pygame.draw.rect(world, (0,0,0), (0, 0, world.get_rect().width, world.get_rect().height))
@@ -77,7 +86,9 @@ def sort_ai_by_score():
 #no worky
 def kill_bottom_half():
     global ai_players
-    ai_players = ai_players[0:int(len(ai_players)/2)]
+    length = len(ai_players)
+    for i in range(int(length/2)):
+        del ai_players[i]
 
 # initialize all data before gameplay
 create_map_1()
@@ -110,8 +121,8 @@ while not simOver:
     if ai_players[0].is_done():
         for p in ai_players:
             sort_ai_by_score()
-            kill_bottom_half()
             p.reset()
+        kill_bottom_half()
 
 
     for p in ai_players:

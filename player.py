@@ -60,7 +60,10 @@ class Player:
             self.isJumping = False
             self.currentJumpVel = self.maxJumpVel
         if self.is_map_right_collision():
-            self.x = oldx
+            self.x = oldx + self.speed
+        if self.is_map_left_collision():
+            self.x = oldx - self.speed
+
 
         self.check_coin_collision()
 
@@ -116,6 +119,16 @@ class Player:
         for box in mapHitBoxes:
             if myHitBox.colliderect(box):
                 if myRightX > box.x: # I am hitting and to the RIGHT this platform
+                    return True;
+
+        return False
+    def is_map_left_collision(self):
+        myHitBox = pygame.Rect(self.x, self.y, self.width, self.height)
+        myLeftx = myHitBox.x
+        mapHitBoxes = self.map.get_hit_box_list()
+        for box in mapHitBoxes:
+            if myHitBox.colliderect(box):
+                if myLeftx < box.x: # I am hitting and to the LEFT this platform
                     return True;
 
         return False
