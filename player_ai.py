@@ -33,7 +33,8 @@ class PlayerAI:
                 self.dna.append(2)
             elif(choice <= 100): #move right
                 self.dna.append(3)
-
+    def get_dna_sequence(self):
+        return self.dna
     def reset(self):
         self.currentAllele = 0
         self.player.set_x(400)

@@ -39,6 +39,7 @@ def create_map_1():
     map1.add(Platform(600,200,30,400,(0,255,0)))
     map1.add(Platform(715,120,300,30,(0,255,0)))
     map1.add(Platform(740,700,300,30,(0,255,0)))
+    map1.add(Platform(0, 0, 30, 700, (0, 255, 0)))
     map1.add_coin(Coin(600,650))
     map1.add_coin(Coin(220,450))
     map1.add_coin(Coin(730,80))
@@ -51,6 +52,7 @@ def add_kids():
     dnaSliceIndex = random.randint(0,499)
     parent1_dna_slice = ai_players[parent1].get_dna_sequence[0:dnaSliceIndex]
     parent2_dna_slice = ai_players[parent2].get_dna_sequence[0:dnaSliceIndex]
+    
 def draw_mouse_coords():
     textSurface = myfont.render(str(pygame.mouse.get_pos()), True, (255,255,255))
     world.blit(textSurface, (50, 30))
