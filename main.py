@@ -19,7 +19,7 @@ simOver = False
 ai_players = []
 map1 = Map()
 camera_offset = (0,0)
-camera_pos = (0,500)
+camera_pos = (625,350)
 
 #game independent variables (needed for every pygame)
 FPS = 60 #60 Frames Per Second for the game update cycle
@@ -47,12 +47,16 @@ def create_map_1():
 
 def add_kids():
     allParents = len(ai_players)
-    parent1 = random.randint(0,allParents - 1)
-    parent2 = random.randint(0, allParents - 1)
-    dnaSliceIndex = random.randint(0,499)
-    parent1_dna_slice = ai_players[parent1].get_dna_sequence[0:dnaSliceIndex]
-    parent2_dna_slice = ai_players[parent2].get_dna_sequence[0:dnaSliceIndex]
-    
+    for i in range(allParents):
+        parent1 = random.randint(0, allParents - 1)
+        parent2 = random.randint(0, allParents - 1)
+        dnaSliceIndex = random.randint(0, 499)
+        parent1_dna_slice = ai_players[parent1].get_dna_sequence(0, dnaSliceIndex)
+        parent2_dna_slice = ai_players[parent2].get_dna_sequence(dnaSliceIndex, -1)
+        kid_dna = PlayerAI(parent1_dna_slice + parent2_dna_slice)
+        ai_players.append(kid_dna)
+
+
 def draw_mouse_coords():
     textSurface = myfont.render(str(pygame.mouse.get_pos()), True, (255,255,255))
     world.blit(textSurface, (50, 30))
@@ -125,6 +129,7 @@ while not simOver:
             sort_ai_by_score()
             p.reset()
         kill_bottom_half()
+        add_kids()
 
 
     for p in ai_players:

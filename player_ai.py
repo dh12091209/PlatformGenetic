@@ -4,9 +4,9 @@ import time
 from player import *
 
 class PlayerAI:
-    def __init__(self):
+    def __init__(self, dna = []):
         self.player = Player((random.randint(0,255),random.randint(0,255),random.randint(0,255)))
-        self.dna = []
+        self.dna = dna
         self.allele_count = 500
         self.create_dna_sequence()
         self.currentAllele = 0
@@ -33,8 +33,8 @@ class PlayerAI:
                 self.dna.append(2)
             elif(choice <= 100): #move right
                 self.dna.append(3)
-    def get_dna_sequence(self):
-        return self.dna
+    def get_dna_sequence(self,From,To):
+        return self.dna[From:To]
     def reset(self):
         self.currentAllele = 0
         self.player.set_x(400)
