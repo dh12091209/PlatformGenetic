@@ -53,7 +53,8 @@ def add_kids():
         dnaSliceIndex = random.randint(0, 499)
         parent1_dna_slice = ai_players[parent1].get_dna_sequence(0, dnaSliceIndex)
         parent2_dna_slice = ai_players[parent2].get_dna_sequence(dnaSliceIndex, -1)
-        kid_dna = PlayerAI(parent1_dna_slice + parent2_dna_slice)
+        kid_dna = PlayerAI()
+        kid_dna.set_dna_sequence(parent1_dna_slice + parent2_dna_slice)
         ai_players.append(kid_dna)
 
 
