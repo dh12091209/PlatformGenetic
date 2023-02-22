@@ -47,6 +47,7 @@ def create_map_1():
 
 def add_kids():
     allParents = len(ai_players)
+    kidList = []
     for i in range(allParents):
         parent1 = random.randint(0, allParents - 1)
         parent2 = random.randint(0, allParents - 1)
@@ -54,8 +55,10 @@ def add_kids():
         parent1_dna_slice = ai_players[parent1].get_dna_sequence(0, dnaSliceIndex)
         parent2_dna_slice = ai_players[parent2].get_dna_sequence(dnaSliceIndex, -1)
         kid_dna = PlayerAI()
+        kid_dna.setMap(map1)
         kid_dna.set_dna_sequence(parent1_dna_slice + parent2_dna_slice)
-        ai_players.append(kid_dna)
+        kidList.append(kid_dna)
+    ai_players += kidList
 
 
 def draw_mouse_coords():

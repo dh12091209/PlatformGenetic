@@ -54,6 +54,8 @@ class Player:
 
         self.handle_key_presses()
         self.handleJump()
+        print(self.y)
+        print(self.map.get_gravity())
         self.y -= self.map.get_gravity()
         if self.is_map_bottom_collision():
             self.y = oldy

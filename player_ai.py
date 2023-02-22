@@ -72,7 +72,9 @@ class PlayerAI:
 
             self.next_act = time.time_ns() + self.delay
             self.currentAllele += 1
-            # print(str(self.currentAllele) + ":" + str(self.dna[self.currentAllele]))
+
+            print(str(len(self.dna)) + ":" + str(self.currentAllele))
+            print(str(self.currentAllele) + ":" + str(self.dna[self.currentAllele]))
 
         self.x_distance_covered = self.player.get_x()
 
