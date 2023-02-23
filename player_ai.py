@@ -54,6 +54,7 @@ class PlayerAI:
     def act(self):
         #print(str(time.time_ns()))
         if self.next_act < time.time_ns() and self.currentAllele < 500:
+            print(str(len(self.dna)) + ":" + str(self.currentAllele))
             if self.dna[self.currentAllele] == 1:
                 self.player.jump()
             elif self.dna[self.currentAllele] == 2:
@@ -73,8 +74,7 @@ class PlayerAI:
             self.next_act = time.time_ns() + self.delay
             self.currentAllele += 1
 
-            print(str(len(self.dna)) + ":" + str(self.currentAllele))
-            print(str(self.currentAllele) + ":" + str(self.dna[self.currentAllele]))
+            # print(str(self.currentAllele) + ":" + str(self.dna[self.currentAllele]))
 
         self.x_distance_covered = self.player.get_x()
 

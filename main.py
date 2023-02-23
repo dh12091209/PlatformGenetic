@@ -20,6 +20,7 @@ ai_players = []
 map1 = Map()
 camera_offset = (0,0)
 camera_pos = (625,350)
+gen_num = 0
 
 #game independent variables (needed for every pygame)
 FPS = 60 #60 Frames Per Second for the game update cycle
@@ -45,7 +46,7 @@ def create_map_1():
     map1.add_coin(Coin(730,80))
     map1.set_gravity(-4)
 
-def add_kids():
+def add_kids(ai_players):
     allParents = len(ai_players)
     kidList = []
     for i in range(allParents):
@@ -53,7 +54,7 @@ def add_kids():
         parent2 = random.randint(0, allParents - 1)
         dnaSliceIndex = random.randint(0, 499)
         parent1_dna_slice = ai_players[parent1].get_dna_sequence(0, dnaSliceIndex)
-        parent2_dna_slice = ai_players[parent2].get_dna_sequence(dnaSliceIndex, -1)
+        parent2_dna_slice = ai_players[parent2].get_dna_sequence(dnaSliceIndex-1, -1)
         kid_dna = PlayerAI()
         kid_dna.setMap(map1)
         kid_dna.set_dna_sequence(parent1_dna_slice + parent2_dna_slice)
@@ -68,6 +69,8 @@ def draw_mouse_coords():
     world.blit(textSurface, (50, 70))
     textSurface = myfont.render(str(len(ai_players)), True, (255, 255, 255))
     world.blit(textSurface, (50, 110))
+    textSurface = myfont.render("Gen: " + + str(gen_num), True, (255, 255, 255))
+    world.blit(textSurface, (50, 150))
 
 def clear_screen():
     pygame.draw.rect(world, (0,0,0), (0, 0, world.get_rect().width, world.get_rect().height))
@@ -133,7 +136,8 @@ while not simOver:
             sort_ai_by_score()
             p.reset()
         kill_bottom_half()
-        add_kids()
+        add_kids(ai_players)
+        gen_num += 1
 
 
     for p in ai_players:
