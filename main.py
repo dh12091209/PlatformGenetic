@@ -53,8 +53,8 @@ def add_kids(ai_players):
         parent1 = random.randint(0, allParents - 1)
         parent2 = random.randint(0, allParents - 1)
         dnaSliceIndex = random.randint(0, 499)
-        parent1_dna_slice = ai_players[parent1].get_dna_sequence(0, dnaSliceIndex)
-        parent2_dna_slice = ai_players[parent2].get_dna_sequence(dnaSliceIndex-1, -1)
+        parent1_dna_slice = ai_players[parent1].get_dna_sequence(0, dnaSliceIndex+1)
+        parent2_dna_slice = ai_players[parent2].get_dna_sequence(dnaSliceIndex+1, 500)
         kid_dna = PlayerAI()
         kid_dna.setMap(map1)
         kid_dna.set_dna_sequence(parent1_dna_slice + parent2_dna_slice)
@@ -69,7 +69,7 @@ def draw_mouse_coords():
     world.blit(textSurface, (50, 70))
     textSurface = myfont.render(str(len(ai_players)), True, (255, 255, 255))
     world.blit(textSurface, (50, 110))
-    textSurface = myfont.render("Gen: " + + str(gen_num), True, (255, 255, 255))
+    textSurface = myfont.render("Gen: " + str(gen_num), True, (255, 255, 255))
     world.blit(textSurface, (50, 150))
 
 def clear_screen():

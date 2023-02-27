@@ -54,14 +54,17 @@ class PlayerAI:
     def act(self):
         #print(str(time.time_ns()))
         if self.next_act < time.time_ns() and self.currentAllele < 500:
-            print(str(len(self.dna)) + ":" + str(self.currentAllele))
-            if self.dna[self.currentAllele] == 1:
-                self.player.jump()
-            elif self.dna[self.currentAllele] == 2:
-                self.vx -= self.force_x
-            elif self.dna[self.currentAllele] == 3:
-                self.vx += self.force_x
-
+            try:
+                if self.dna[self.currentAllele] == 1:
+                    self.player.jump()
+                elif self.dna[self.currentAllele] == 2:
+                    self.vx -= self.force_x
+                elif self.dna[self.currentAllele] == 3:
+                    self.vx += self.force_x
+            except:
+                # print(str(len(self.dna)) + ":" + str(self.currentAllele))
+                print(self.dna)
+                print(len(self.dna))
             #add x-velocity to x-position
             self.player.set_x(self.player.get_x() + self.vx)
 
