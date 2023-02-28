@@ -41,6 +41,7 @@ class PlayerAI:
         self.currentAllele = 0
         self.player.set_x(400)
         self.player.set_y(400)
+        self.player.reset_coin()
 
 
 
