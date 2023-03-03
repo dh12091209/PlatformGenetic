@@ -14,6 +14,7 @@ class Player:
         self.maxJumpVel = 40
         self.speed = 10
         self.coins = 0
+        self.hit = []
 
 
 
@@ -75,14 +76,15 @@ class Player:
         coins = self.map.get_coins()
         myHitBox = pygame.Rect(self.x, self.y, self.width, self.height)
         for c in coins:
-            if myHitBox.colliderect(c.getCollisionRect()) and not c.get_hit():
+            if myHitBox.colliderect(c.getCollisionRect()) and not c in self.hit:
                 # coins.remove(c)
                 self.coins += 1
-                # print(self.coins)
-                c.set_hit()
+                print(self.coins)
+                self.hit.append(c)
 
     def reset_coin(self):
         self.coins = 0
+        self.hit = []
     def get_score(self):
         return self.coins
 
@@ -199,14 +201,10 @@ class Coin:
         self.y = y
         self.size = 30
         self.color = (255,255,0)
-        self.hit = False
+
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size))
 
     def getCollisionRect(self):
         return pygame.Rect(self.x, self.y, self.size, self.size)
-    def get_hit(self):
-        return self.hit
-    def set_hit(self):
-        self.hit = True

@@ -61,6 +61,12 @@ def add_kids(ai_players):
         kidList.append(kid_dna)
     ai_players += kidList
 
+def high_score():
+    max = -1
+    for i in ai_players:
+        if i.score() > max:
+            max = i.score()
+    return max
 
 def draw_mouse_coords():
     textSurface = myfont.render(str(pygame.mouse.get_pos()), True, (255,255,255))
@@ -71,6 +77,8 @@ def draw_mouse_coords():
     world.blit(textSurface, (50, 110))
     textSurface = myfont.render("Gen: " + str(gen_num), True, (255, 255, 255))
     world.blit(textSurface, (50, 150))
+    textSurface = myfont.render("Highest Score: " + str(high_score()), True, (255, 255, 255))
+    world.blit(textSurface, (200, 30))
 
 def clear_screen():
     pygame.draw.rect(world, (0,0,0), (0, 0, world.get_rect().width, world.get_rect().height))

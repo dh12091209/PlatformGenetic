@@ -16,7 +16,8 @@ class PlayerAI:
         self.force_x = 4
         self.world_force_x = 0.5
         self.x_distance_covered = 0
-
+    def score(self):
+        return self.player.get_score()
     def create_dna_sequence(self):
         # 0 - junk DNA - 80%
         # 1 - jump - 6%
